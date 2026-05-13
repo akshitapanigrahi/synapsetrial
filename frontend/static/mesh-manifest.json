@@ -1,30 +1,379 @@
 {
   "neurons": [
-    { "label": "A", "bodyId": 10860, "available": true },
-    { "label": "B", "bodyId": 12240, "available": true },
-    { "label": "C", "bodyId": 12326, "available": true },
-    { "label": "D", "bodyId": 12681, "available": true },
-    { "label": "E", "bodyId": 13935, "available": true },
-    { "label": "F", "bodyId": 10629, "available": true },
-    { "label": "G", "bodyId": 15890, "available": true },
-    { "label": "H", "bodyId": 16554, "available": true },
-    { "label": "I", "bodyId": 17336, "available": true },
-    { "label": "J", "bodyId": 17459, "available": true },
-    { "label": "K", "bodyId": 17778, "available": true },
-    { "label": "L", "bodyId": 17920, "available": true },
-    { "label": "M", "bodyId": 18168, "available": true },
-    { "label": "N", "bodyId": 10048, "available": true },
-    { "label": "O", "bodyId": 10010, "available": true },
-    { "label": "P", "bodyId": 20020, "available": true },
-    { "label": "Q", "bodyId": 20457, "available": true },
-    { "label": "R", "bodyId": 10001, "available": true },
-    { "label": "S", "bodyId": 10038, "available": true },
-    { "label": "T", "bodyId": 20989, "available": true },
-    { "label": "U", "bodyId": 21176, "available": true },
-    { "label": "V", "bodyId": 10073, "available": true },
-    { "label": "W", "bodyId": 22445, "available": true },
-    { "label": "X", "bodyId": 34869, "available": true },
-    { "label": "Y", "bodyId": 53098, "available": true },
-    { "label": "Z", "bodyId": 514230, "available": true }
+    {
+      "label": "1",
+      "bodyId": 10860,
+      "available": true
+    },
+    {
+      "label": "2",
+      "bodyId": 12240,
+      "available": true
+    },
+    {
+      "label": "3",
+      "bodyId": 12326,
+      "available": true
+    },
+    {
+      "label": "4",
+      "bodyId": 12681,
+      "available": true
+    },
+    {
+      "label": "5",
+      "bodyId": 13935,
+      "available": true
+    },
+    {
+      "label": "6",
+      "bodyId": 10629,
+      "available": true
+    },
+    {
+      "label": "7",
+      "bodyId": 15890,
+      "available": true
+    },
+    {
+      "label": "8",
+      "bodyId": 16554,
+      "available": true
+    },
+    {
+      "label": "9",
+      "bodyId": 17336,
+      "available": true
+    },
+    {
+      "label": "10",
+      "bodyId": 17459,
+      "available": true
+    },
+    {
+      "label": "11",
+      "bodyId": 17778,
+      "available": true
+    },
+    {
+      "label": "12",
+      "bodyId": 17920,
+      "available": true
+    },
+    {
+      "label": "13",
+      "bodyId": 18168,
+      "available": true
+    },
+    {
+      "label": "14",
+      "bodyId": 10048,
+      "available": true
+    },
+    {
+      "label": "15",
+      "bodyId": 10010,
+      "available": true
+    },
+    {
+      "label": "16",
+      "bodyId": 20020,
+      "available": true
+    },
+    {
+      "label": "17",
+      "bodyId": 20457,
+      "available": true
+    },
+    {
+      "label": "18",
+      "bodyId": 10001,
+      "available": true
+    },
+    {
+      "label": "19",
+      "bodyId": 10038,
+      "available": true
+    },
+    {
+      "label": "20",
+      "bodyId": 20989,
+      "available": true
+    },
+    {
+      "label": "21",
+      "bodyId": 21176,
+      "available": true
+    },
+    {
+      "label": "22",
+      "bodyId": 10073,
+      "available": true
+    },
+    {
+      "label": "23",
+      "bodyId": 22445,
+      "available": true
+    },
+    {
+      "label": "24",
+      "bodyId": 34869,
+      "available": true
+    },
+    {
+      "label": "25",
+      "bodyId": 53098,
+      "available": true
+    },
+    {
+      "label": "26",
+      "bodyId": 514230,
+      "available": true
+    },
+    {
+      "label": "27",
+      "bodyId": 232513628,
+      "available": true
+    },
+    {
+      "label": "28",
+      "bodyId": 262504004,
+      "available": true
+    },
+    {
+      "label": "29",
+      "bodyId": 262840563,
+      "available": true
+    },
+    {
+      "label": "30",
+      "bodyId": 263199096,
+      "available": true
+    },
+    {
+      "label": "31",
+      "bodyId": 327255181,
+      "available": true
+    },
+    {
+      "label": "32",
+      "bodyId": 540462600,
+      "available": true
+    },
+    {
+      "label": "33",
+      "bodyId": 541697718,
+      "available": true
+    },
+    {
+      "label": "34",
+      "bodyId": 766186252,
+      "available": true
+    },
+    {
+      "label": "35",
+      "bodyId": 799279899,
+      "available": true
+    },
+    {
+      "label": "36",
+      "bodyId": 821712204,
+      "available": true
+    },
+    {
+      "label": "37",
+      "bodyId": 852923433,
+      "available": true
+    },
+    {
+      "label": "38",
+      "bodyId": 946300031,
+      "available": true
+    },
+    {
+      "label": "39",
+      "bodyId": 950919329,
+      "available": true
+    },
+    {
+      "label": "40",
+      "bodyId": 977667682,
+      "available": true
+    },
+    {
+      "label": "41",
+      "bodyId": 1011184205,
+      "available": true
+    },
+    {
+      "label": "42",
+      "bodyId": 1039970967,
+      "available": true
+    },
+    {
+      "label": "43",
+      "bodyId": 1100792636,
+      "available": true
+    },
+    {
+      "label": "44",
+      "bodyId": 1127423887,
+      "available": true
+    },
+    {
+      "label": "45",
+      "bodyId": 1224249917,
+      "available": true
+    },
+    {
+      "label": "46",
+      "bodyId": 1260833150,
+      "available": true
+    },
+    {
+      "label": "47",
+      "bodyId": 5813022339,
+      "available": true
+    },
+    {
+      "label": "48",
+      "bodyId": 5813022738,
+      "available": true
+    },
+    {
+      "label": "49",
+      "bodyId": 5813025982,
+      "available": true
+    },
+    {
+      "label": "50",
+      "bodyId": 5813057274,
+      "available": true
+    },
+    {
+      "label": "51",
+      "bodyId": 10180,
+      "available": true
+    },
+    {
+      "label": "52",
+      "bodyId": 10227,
+      "available": true
+    },
+    {
+      "label": "53",
+      "bodyId": 10446,
+      "available": true
+    },
+    {
+      "label": "54",
+      "bodyId": 10477,
+      "available": true
+    },
+    {
+      "label": "55",
+      "bodyId": 10487,
+      "available": true
+    },
+    {
+      "label": "56",
+      "bodyId": 10518,
+      "available": true
+    },
+    {
+      "label": "57",
+      "bodyId": 10597,
+      "available": true
+    },
+    {
+      "label": "58",
+      "bodyId": 10674,
+      "available": true
+    },
+    {
+      "label": "59",
+      "bodyId": 10734,
+      "available": true
+    },
+    {
+      "label": "60",
+      "bodyId": 11044,
+      "available": true
+    },
+    {
+      "label": "61",
+      "bodyId": 11919,
+      "available": true
+    },
+    {
+      "label": "62",
+      "bodyId": 11945,
+      "available": true
+    },
+    {
+      "label": "63",
+      "bodyId": 12079,
+      "available": true
+    },
+    {
+      "label": "64",
+      "bodyId": 12169,
+      "available": true
+    },
+    {
+      "label": "65",
+      "bodyId": 12278,
+      "available": true
+    },
+    {
+      "label": "66",
+      "bodyId": 12910,
+      "available": true
+    },
+    {
+      "label": "67",
+      "bodyId": 13701,
+      "available": true
+    },
+    {
+      "label": "68",
+      "bodyId": 13817,
+      "available": true
+    },
+    {
+      "label": "69",
+      "bodyId": 13823,
+      "available": true
+    },
+    {
+      "label": "70",
+      "bodyId": 15487,
+      "available": true
+    },
+    {
+      "label": "71",
+      "bodyId": 16595,
+      "available": true
+    },
+    {
+      "label": "72",
+      "bodyId": 23253,
+      "available": true
+    },
+    {
+      "label": "73",
+      "bodyId": 31925,
+      "available": true
+    },
+    {
+      "label": "74",
+      "bodyId": 164229,
+      "available": true
+    },
+    {
+      "label": "75",
+      "bodyId": 10244,
+      "available": true
+    }
   ]
 }

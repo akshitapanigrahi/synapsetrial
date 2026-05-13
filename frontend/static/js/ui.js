@@ -85,14 +85,14 @@ export class UI {
   clearTarget() {}
 
   /** Update the 2-slot input buffer display.
-   *  ready=true applies the gold "awaiting Enter" style to both filled slots. */
+   *  Slot 1: synapse type (E or I). Slot 2: neuron label after click, or ⊙ when awaiting click. */
   setInputBuffer(typeKey, letterKey, ready = false) {
-    this._slotType.textContent   = typeKey  ?? '_';
-    this._slotLetter.textContent = letterKey ?? '_';
+    this._slotType.textContent   = typeKey ?? '_';
+    this._slotLetter.textContent = letterKey ?? (typeKey ? '⊙' : '_');
 
     const filledCls = ready ? 'filled ready' : 'filled';
     this._slotType.className   = 'input-slot' + (typeKey   ? ` ${filledCls}` : '');
-    this._slotLetter.className = 'input-slot' + (letterKey ? ` ${filledCls}` : '');
+    this._slotLetter.className = 'input-slot' + (letterKey ? ` ${filledCls}` : (typeKey ? ' waiting' : ''));
   }
 
   /** Flash slots green/red then clear them. */

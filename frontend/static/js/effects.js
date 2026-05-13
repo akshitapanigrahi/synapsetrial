@@ -44,7 +44,7 @@ export function startFiringAnimation(neuronGroup, type) {
 
   const meshes = [];
   neuronGroup.traverse(obj => {
-    if (obj.isMesh && obj.material) meshes.push(obj.material);
+    if (obj.isMesh && obj.material?.emissive) meshes.push(obj.material);
   });
   const baseEmissive = meshes[0]?.emissive.clone() ?? new THREE.Color(0);
 

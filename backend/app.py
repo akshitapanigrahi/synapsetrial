@@ -28,19 +28,19 @@ def static_files(filename):
 def _load_config():
     config_path = os.path.join(os.path.dirname(__file__), "..", "neuron_config.json")
     with open(config_path) as f:
-        data = json.load(f)
-    return data["neuron_ids"], list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        sources = json.load(f)["sources"]
+    neurons = []
+    for source in sources:
+        for n in source["neurons"]:
+            neurons.append((n["label"], n["body_id"]))
+    return neurons
 
 
 @app.route("/api/mesh-manifest")
 def mesh_manifest():
-    """Return label→bodyId mapping and whether each OBJ file is on disk.
-    The frontend uses this to decide whether to load real meshes or fall
-    back to procedural geometry per neuron."""
-    neuron_ids, neuron_labels = _load_config()
-
+    """Return label→bodyId mapping and whether each OBJ file is on disk."""
     neurons = []
-    for label, body_id in zip(neuron_labels, neuron_ids):
+    for label, body_id in _load_config():
         obj_path = os.path.join(MESH_DIR, f"{body_id}.obj")
         neurons.append({
             "label":     label,

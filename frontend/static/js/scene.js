@@ -158,6 +158,19 @@ export class NeuronScene {
         group = buildNeuronGroup(color, i, 1.0);
       }
 
+      // Invisible hit sphere — large enough to catch clicks anywhere in the glow
+      // without requiring a direct hit on the thin dendrite tubes
+      const hitSphere = new THREE.Mesh(
+        new THREE.SphereGeometry(50, 8, 6),
+        new THREE.MeshBasicMaterial({ visible: false }),
+      );
+      hitSphere.userData.neuronLabel = label;
+      group.add(hitSphere);
+
+      // Tag every mesh in the group so raycasting can identify the neuron
+      group.userData.neuronLabel = label;
+      group.traverse(child => { child.userData.neuronLabel = label; });
+
       group.position.copy(pos);
       this._scene.add(group);
       this._neuronGroups.set(label, group);
@@ -293,6 +306,60 @@ export class NeuronScene {
 
   disableAutoRotate()  { this._autoRotate = false; }
   enableAutoRotate()   { this._autoRotate = true;  }
+
+  /**
+   * Wire up click-to-identify: calls callback(label) when the user clicks a
+   * foreground neuron mesh. Ignores drags (> 5 px movement between down/up).
+   */
+  setupNeuronClickHandler(callback) {
+    const dom = this._renderer.domElement;
+    let downX = 0, downY = 0;
+    dom.addEventListener('mousedown', e => { downX = e.clientX; downY = e.clientY; });
+    dom.addEventListener('click', e => {
+      if (Math.hypot(e.clientX - downX, e.clientY - downY) > 5) return;
+      const label = this._raycastNeuron(e.clientX, e.clientY);
+      if (label) callback(label, e.clientX, e.clientY);
+    });
+  }
+
+  _raycastNeuron(clientX, clientY) {
+    const rect   = this._renderer.domElement.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const clickY = clientY - rect.top;
+    const hw     = rect.width  / 2;
+    const hh     = rect.height / 2;
+
+    const project = (pos) => {
+      const v = pos.clone().project(this._camera);
+      if (v.z >= 1) return null;   // behind camera
+      return { sx: v.x * hw + hw, sy: -v.y * hh + hh };
+    };
+
+    // Priority pass — if click is within a large radius of the currently
+    // firing neuron, always return that neuron.  This prevents neighbouring
+    // neurons from stealing clicks that are clearly aimed at the active glow.
+    if (this._currentFiringLabel) {
+      const pos = this._neuronPositions.get(this._currentFiringLabel);
+      if (pos) {
+        const p = project(pos);
+        if (p && Math.hypot(clickX - p.sx, clickY - p.sy) < 260) {
+          return this._currentFiringLabel;
+        }
+      }
+    }
+
+    // Fallback — nearest neuron in screen space (handles intentional
+    // clicks on a non-firing neuron to register a deliberate wrong answer).
+    let bestLabel = null;
+    let bestDist  = Infinity;
+    for (const [label, pos] of this._neuronPositions) {
+      const p = project(pos);
+      if (!p) continue;
+      const d = Math.hypot(clickX - p.sx, clickY - p.sy);
+      if (d < bestDist) { bestDist = d; bestLabel = label; }
+    }
+    return bestLabel;
+  }
 
   /**
    * Stop the current firing animation and remove the firing label highlight.

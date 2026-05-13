@@ -58,12 +58,15 @@ async function bootstrap() {
     showLaunchBar();   // re-show top-right bar so user can start again
   });
 
-  // ── Keyboard input ───────────────────────────────────────────────────────
+  // ── Keyboard input (type selection: E or R) ──────────────────────────────
   document.addEventListener('keydown', e => {
     if (e.repeat) return;
-    // Prevent Backspace from navigating away; Enter from submitting forms
-    if (e.key === 'Backspace' || e.key === 'Enter') e.preventDefault();
     game.handleKey(e.key);
+  });
+
+  // ── Neuron click (neuron identification) ─────────────────────────────────
+  scene.setupNeuronClickHandler((label) => {
+    game.handleNeuronClick(label);
   });
 
   // ── Element refs ─────────────────────────────────────────────────────────

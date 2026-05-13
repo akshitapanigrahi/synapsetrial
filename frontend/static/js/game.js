@@ -2,8 +2,8 @@
  * Game state machine and bit-rate computation.
  *
  * Input scheme:
- *   First key  → E (excitatory) or I (inhibitory)
- *   Second key → A–Z (neuron label)
+ *   Key press → E (excitatory) or R (inhibitory/repressive)
+ *   Mouse click → neuron mesh in the 3D scene
  *
  * N = 52  (26 neurons × 2 types)
  * Bit rate formula (Shenoy et al. 2021):
@@ -12,14 +12,12 @@
 
 import { NEURON_LABELS } from './neurons.js';
 
-export const N          = 52;
+export const N          = 150;
 const GAME_DURATION     = 60;    // seconds
-const LOG2_N_MINUS_1   = Math.log2(N - 1); // ≈ 5.672
+const LOG2_N_MINUS_1   = Math.log2(N - 1); // ≈ 7.228
 
-// Valid first keys (type indicator)
-const TYPE_KEYS   = new Set(['e', 'i']);
-// Valid second keys (neuron label — lowercase version of NEURON_LABELS)
-const LETTER_KEYS = new Set(NEURON_LABELS.map(l => l.toLowerCase()));
+// E = excitatory, R = inhibitory (repressive)
+const TYPE_KEYS = new Set(['e', 'r']);
 
 /** Generate a random i.i.d. trial sequence. */
 function generateSequence(length) {
@@ -95,40 +93,29 @@ export class Game {
     this._ui.clearTarget();
   }
 
+  // Stage 1: press E (excitatory) or R (inhibitory) to set synapse type
   handleKey(rawKey) {
     if (this._state !== 'PLAYING' || this._transitioning) return;
-
     const key = rawKey.toLowerCase();
+    if (!TYPE_KEYS.has(key)) return;
+    this._buffer = key;
+    this._ui.setInputBuffer(key === 'r' ? 'I' : 'E', null);
+  }
 
-    if (key === 'backspace' || key === 'enter') return;
-
-    if (!this._buffer) {
-      // Stage 1 — waiting for E or I
-      if (!TYPE_KEYS.has(key)) return;
-      this._buffer = key;
-      this._ui.setInputBuffer(key.toUpperCase(), null);
-
-    } else {
-      // Stage 2 — waiting for neuron label; letter keys take priority so that
-      // E and I are treated as neuron labels, not type-key overwrites.
-      if (LETTER_KEYS.has(key)) {
-        this._pendingLetter = key;
-        this._ui.setInputBuffer(this._buffer.toUpperCase(), key.toUpperCase());
-        this._transitioning = true;
-        setTimeout(() => {
-          this._transitioning = false;
-          this._confirmSelection();
-        }, 25);
-      } else if (TYPE_KEYS.has(key)) {
-        // Allow overwriting the type slot before the letter is chosen
-        this._buffer = key;
-        this._ui.setInputBuffer(key.toUpperCase(), null);
-      }
-    }
+  // Stage 2: click a neuron mesh in the 3D scene
+  handleNeuronClick(label) {
+    if (this._state !== 'PLAYING' || this._transitioning || !this._buffer) return;
+    this._pendingLetter = label.toUpperCase();
+    this._ui.setInputBuffer(this._buffer === 'r' ? 'I' : 'E', label.toUpperCase());
+    this._transitioning = true;
+    setTimeout(() => {
+      this._transitioning = false;
+      this._confirmSelection();
+    }, 25);
   }
 
   _confirmSelection() {
-    const typedType   = this._buffer.toUpperCase();
+    const typedType   = this._buffer === 'r' ? 'I' : 'E';
     const typedLetter = this._pendingLetter.toUpperCase();
     const target      = this._seq[this._idx];
     const correct     = (typedType === target.type && typedLetter === target.letter);

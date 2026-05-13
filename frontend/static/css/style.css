@@ -163,6 +163,15 @@ html, body {
   background: rgba(255,215,0,0.08);
   box-shadow: 0 0 8px rgba(255,215,0,0.25);
 }
+.input-slot.waiting {
+  border-color: var(--gold);
+  color: var(--gold);
+  animation: slot-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes slot-pulse {
+  from { box-shadow: 0 0 4px rgba(255,215,0,0.2); }
+  to   { box-shadow: 0 0 12px rgba(255,215,0,0.6); }
+}
 .input-slot.correct-fill {
   border-color: var(--correct);
   color: var(--correct);
