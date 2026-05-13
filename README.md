@@ -27,22 +27,21 @@ identical in-game.
 
 ## Design rationale
 
-### Why N = 30?
+### Why N = 52?
 
-Each trial presents one of 15 neurons firing either **excitatory** or
-**inhibitory** — 15 × 2 = 30 equiprobable targets, sampled i.i.d. with
+Each trial presents one of 26 neurons firing either **excitatory** or
+**inhibitory** — 26 × 2 = 52 equiprobable targets, sampled i.i.d. with
 replacement.  
-`log₂(29) ≈ 4.86 bits` per correct selection, which is the highest N that
-still fits a learnable two-keystroke input scheme for a first-session player.
+`log₂(51) ≈ 5.67 bits` per correct selection.
 
 Compared with the canonical N = 8 centre-out task (`log₂(7) ≈ 2.81 bits`),
-N = 30 gives **73 % more bits per trial** with the same accuracy.
+N = 52 gives **102 % more bits per trial** with the same accuracy.
 
 ### Input modality — keyboard two-chord
 
 ```
 [E or I]  →  type indicator  (Excitatory / Inhibitory)
-[A – O]   →  neuron label
+[A – Z]   →  neuron label
 ```
 
 Example: neuron **G** fires with a warm gold pulse → press **E G**
@@ -53,10 +52,10 @@ over 60 s:
 
 ```
 ~55 trials × 0.8 accuracy → Sc=44, Si=11
-B = 4.86 × (44−11) / 60 ≈ 2.67 bps
+B = 5.67 × (44−11) / 60 ≈ 3.12 bps
 ```
 
-At 90 % accuracy the same player reaches ~3.2 bps — competitive with
+At 90 % accuracy the same player reaches ~3.7 bps — competitive with
 iBCI cursor-control benchmarks in the literature.
 
 ### Visual design choices
@@ -73,7 +72,7 @@ iBCI cursor-control benchmarks in the literature.
 ### Bit rate formula
 
 ```
-B = log₂(N−1) × max(Sc−Si, 0) / t
+B = log₂(N−1) × max(Sc−Si, 0) / t   [N = 52, log₂(51) ≈ 5.67]
 ```
 
 Where `t` is total elapsed session time (seconds).  

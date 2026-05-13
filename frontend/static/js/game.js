@@ -69,17 +69,18 @@ export class Game {
     this._si            = 0;
     this._buffer        = '';
     this._pendingLetter = '';
-    this._transitioning = false;
-    this._start         = Date.now();
-    this._state  = 'PLAYING';
+    this._transitioning     = false;
+    this._lastBitrateUpdate = 0;
+    this._start             = Date.now();
+    this._state             = 'PLAYING';
 
     this._ui.show();
     this._ui.updateStats(0, 0, 0);
     this._ui.setBitRate(0);
     this._ui.setInputBuffer(null, null);
 
-    this._scene.disableAutoRotate();
 
+    this._scene.disableAutoRotate();
     this._startTimerLoop();
     this._showCurrentTarget();
   }
@@ -198,6 +199,7 @@ export class Game {
     this._state = 'ENDED';
     this._scene.clearPredictiveArc();
     this._scene.stopFiringAnimation(); // dim the last neuron — game over
+    this._scene.enableAutoRotate();
     cancelAnimationFrame(this._rafId);
 
     const finalBitRate = this._bitRate(elapsed);

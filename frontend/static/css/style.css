@@ -47,14 +47,16 @@ html, body {
 }
 .neuron-label {
   position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
   font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: #ffffff;
   text-shadow: 0 0 8px currentColor, 0 0 20px currentColor;
-  transform: translate(-50%, -50%);
-  transition: font-size 0.12s ease, transform 0.12s ease, text-shadow 0.12s ease;
+  transition: font-size 0.12s ease, text-shadow 0.12s ease;
   pointer-events: none;
   user-select: none;
 }
@@ -68,7 +70,6 @@ html, body {
     0 0 24px currentColor,
     0 0 55px currentColor,
     0 0 90px currentColor;
-  transform: translate(-50%, -50%) scale(1.25);
 }
 
 /* ── HUD ─────────────────────────────────────────── */
@@ -375,6 +376,28 @@ html, body {
   background: var(--cyan);
   color: #020408;
   box-shadow: 0 0 14px var(--cyan);
+}
+
+#launch-start-btn.start-btn {
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: rgba(4, 12, 28, 0.6);
+  color: var(--text-dim);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+#launch-start-btn.start-btn:hover {
+  color: var(--text);
+  border-color: rgba(0, 200, 255, 0.5);
+  background: rgba(0, 200, 255, 0.08);
+  box-shadow: none;
 }
 
 /* ── Intro screen ────────────────────────────────── */

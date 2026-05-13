@@ -3,12 +3,13 @@
 Download hemibrain neuron meshes via CloudVolume.
 
 Usage:
-  python3 setup_meshes.py              # download all IDs in neuron_config.py
+  python3 setup_meshes.py              # download all IDs in neuron_config.json
   python3 setup_meshes.py --force      # re-download even if OBJ already exists
 
-To change which neurons appear in the game, edit neuron_config.py.
+To change which neurons appear in the game, edit neuron_config.json.
 """
 
+import json
 import os
 import sys
 
@@ -25,10 +26,24 @@ def _check_imports():
         sys.exit(1)
 
 
+def _load_config():
+    config_path = os.path.join(os.path.dirname(__file__), "neuron_config.json")
+    with open(config_path) as f:
+        data = json.load(f)
+    neuron_ids = data["neuron_ids"]
+    labels = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    if len(neuron_ids) != len(labels):
+        raise ValueError(
+            f"neuron_ids must have exactly {len(labels)} entries, got {len(neuron_ids)}"
+        )
+    return neuron_ids, labels
+
+
 def download_meshes(force: bool = False):
     _check_imports()
     from cloudvolume import CloudVolume
-    from neuron_config import NEURON_IDS, NEURON_LABELS
+
+    NEURON_IDS, NEURON_LABELS = _load_config()
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 

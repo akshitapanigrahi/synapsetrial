@@ -3,12 +3,10 @@ Minimal Flask server — serves the frontend and mesh static files.
 All game logic runs client-side in Three.js / vanilla JS.
 """
 
+import json
 import os
 import sys
 from flask import Flask, send_from_directory, jsonify
-
-# Allow importing neuron_config from the project root
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend")
 STATIC_DIR   = os.path.join(FRONTEND_DIR, "static")
@@ -27,15 +25,22 @@ def static_files(filename):
     return send_from_directory(STATIC_DIR, filename)
 
 
+def _load_config():
+    config_path = os.path.join(os.path.dirname(__file__), "..", "neuron_config.json")
+    with open(config_path) as f:
+        data = json.load(f)
+    return data["neuron_ids"], list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+
 @app.route("/api/mesh-manifest")
 def mesh_manifest():
     """Return label→bodyId mapping and whether each OBJ file is on disk.
     The frontend uses this to decide whether to load real meshes or fall
     back to procedural geometry per neuron."""
-    from neuron_config import NEURON_IDS, NEURON_LABELS
+    neuron_ids, neuron_labels = _load_config()
 
     neurons = []
-    for label, body_id in zip(NEURON_LABELS, NEURON_IDS):
+    for label, body_id in zip(neuron_labels, neuron_ids):
         obj_path = os.path.join(MESH_DIR, f"{body_id}.obj")
         neurons.append({
             "label":     label,

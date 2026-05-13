@@ -2,7 +2,7 @@
  * Three.js scene — camera, renderer, post-processing, neuron mesh management.
  */
 import * as THREE                from 'three';
-import { OrbitControls }         from 'three/addons/controls/OrbitControls.js';
+import { TrackballControls }     from 'three/addons/controls/TrackballControls.js';
 import { EffectComposer }        from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass }            from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass }       from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -90,13 +90,23 @@ export class NeuronScene {
   }
 
   _initControls() {
-    this._controls                 = new OrbitControls(this._camera, this._renderer.domElement);
-    this._controls.enableDamping   = true;
-    this._controls.dampingFactor   = 0.06;
-    this._controls.minDistance     = 80;
-    this._controls.maxDistance     = 2500;
-    this._controls.autoRotate      = true;
-    this._controls.autoRotateSpeed = 0.18;
+    this._controls = new TrackballControls(this._camera, this._renderer.domElement);
+    this._controls.rotateSpeed           = 1.5;
+    this._controls.zoomSpeed             = 1.2;
+    this._controls.panSpeed              = 0.8;
+    this._controls.minDistance           = 80;
+    this._controls.maxDistance           = 2500;
+    this._controls.staticMoving          = false;
+    this._controls.dynamicDampingFactor  = 0.1;
+
+    this._autoRotate      = true;
+    this._userInteracting = false;
+
+    const dom = this._renderer.domElement;
+    dom.addEventListener('mousedown',  () => { this._userInteracting = true;  });
+    dom.addEventListener('touchstart', () => { this._userInteracting = true;  }, { passive: true });
+    window.addEventListener('mouseup',   () => { this._userInteracting = false; });
+    window.addEventListener('touchend',  () => { this._userInteracting = false; });
   }
 
   _onResize() {
@@ -173,7 +183,17 @@ export class NeuronScene {
     requestAnimationFrame(() => this._animate());
     const delta = this._clock.getDelta();
 
+    if (this._autoRotate && !this._userInteracting) {
+      const angle  = -(2 * Math.PI / 60) * 0.18 * delta;
+      const target = this._controls.target;
+      const offset = this._camera.position.clone().sub(target);
+      offset.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+      this._camera.position.copy(target).add(offset);
+      this._camera.lookAt(target);
+    }
+
     this._controls.update();
+    this._camera.updateMatrixWorld();
     drainBloomQueue(delta);
 
     for (let i = this._tickFns.length - 1; i >= 0; i--) {
@@ -186,16 +206,14 @@ export class NeuronScene {
   }
 
   _updateLabelPositions() {
+    const hw = window.innerWidth  / 2;
+    const hh = window.innerHeight / 2;
     for (const [label, el] of this._labelEls) {
-      const pos    = this._neuronPositions.get(label).clone();
-      const offset = new THREE.Vector3(12, 14, 0);
-      pos.add(offset);
-      const v = pos.project(this._camera);
-      const x = (v.x + 1) / 2 * window.innerWidth;
-      const y = (-v.y + 1) / 2 * window.innerHeight;
-      el.style.left    = `${x}px`;
-      el.style.top     = `${y}px`;
-      el.style.display = v.z < 1 ? 'block' : 'none';
+      const v = this._neuronPositions.get(label).clone().project(this._camera);
+      const x = v.x * hw + hw + 12;
+      const y = -v.y * hh + hh - 14;
+      el.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;
+      el.style.display   = v.z < 1 ? 'block' : 'none';
     }
   }
 
@@ -273,8 +291,8 @@ export class NeuronScene {
     return this._neuronPositions.get(label)?.clone() ?? null;
   }
 
-  disableAutoRotate()  { this._controls.autoRotate = false; }
-  enableAutoRotate()   { this._controls.autoRotate = true;  }
+  disableAutoRotate()  { this._autoRotate = false; }
+  enableAutoRotate()   { this._autoRotate = true;  }
 
   /**
    * Stop the current firing animation and remove the firing label highlight.

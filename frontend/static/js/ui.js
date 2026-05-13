@@ -38,7 +38,7 @@ export class UI {
   }
 
   /** Replace the identify panel with a session summary; keep stats panel visible. */
-  showPostGameSummary({ bitRate, sc, si, elapsed }) {
+  showPostGameSummary({ bitRate, sc, si, elapsed, N }) {
     this._hud.classList.remove('hidden');
     document.getElementById('identify-section').classList.add('hidden');
     document.getElementById('post-summary').classList.remove('hidden');
@@ -50,6 +50,7 @@ export class UI {
       ['Sc (correct)',   sc,        'correct'],
       ['Si (incorrect)', si,        'wrong'],
       ['Accuracy',       `${acc}%`, ''],
+      ['N',              N,         ''],
     ];
     const grid = document.getElementById('sum-grid');
     grid.innerHTML = rows.map(([label, val, cls]) =>
