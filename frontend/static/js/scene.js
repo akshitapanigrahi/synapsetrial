@@ -126,7 +126,7 @@ export class NeuronScene {
     }
   }
 
-  async addForegroundNeurons(neuronManifest = []) {
+  async addForegroundNeurons(neuronManifest = [], onProgress = null) {
     const labelsContainer = document.getElementById('labels-container');
     const manifestByLabel = Object.fromEntries(neuronManifest.map(m => [m.label, m]));
 
@@ -162,6 +162,8 @@ export class NeuronScene {
       el.style.textShadow = `0 0 8px ${hexColor}`;
       labelsContainer.appendChild(el);
       this._labelEls.set(label, el);
+
+      if (onProgress) onProgress(i + 1, NEURON_LABELS.length);
     }
   }
 

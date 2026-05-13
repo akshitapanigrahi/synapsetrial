@@ -109,7 +109,6 @@
 <!-- ── INTRO SCREEN ──────────────────────────────────── -->
 <div id="intro-screen">
   <div id="intro-card">
-    <button id="close-intro-btn" title="Close">✕</button>
     <h1 class="brand">SYNAPSE</h1>
     <p class="subtitle">Neural Connectome Bit Rate Game</p>
 
@@ -143,6 +142,12 @@
     </div>
 
     <p class="duration-note">Press ▶ to start · Drag to orbit · Scroll to zoom</p>
+
+    <div id="mesh-loader">
+      <div id="mesh-loader-track"><div id="mesh-loader-fill"></div></div>
+      <span id="mesh-loader-label">Loading neuron meshes...</span>
+    </div>
+    <button id="enter-btn" class="hidden">Enter →</button>
   </div>
 </div>
 

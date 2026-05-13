@@ -28,8 +28,22 @@ async function bootstrap() {
   const scene     = new NeuronScene(container);
 
   // Populate neurons (real OBJs where available, procedural otherwise)
+  const meshLoaderFill  = document.getElementById('mesh-loader-fill');
+  const meshLoaderLabel = document.getElementById('mesh-loader-label');
+  const meshLoader      = document.getElementById('mesh-loader');
+  const enterBtn        = document.getElementById('enter-btn');
+
   scene.addBackgroundNeurons();
-  await scene.addForegroundNeurons(neuronManifest);
+  await scene.addForegroundNeurons(neuronManifest, (loaded, total) => {
+    meshLoaderFill.style.width = `${(loaded / total) * 100}%`;
+    meshLoaderLabel.textContent = 'Loading neuron meshes...';
+    if (loaded === total) {
+      setTimeout(() => {
+        meshLoader.classList.add('hidden');
+        enterBtn.classList.remove('hidden');
+      }, 400);
+    }
+  });
 
   // UI + network graph
   const ui        = new UI();
@@ -90,11 +104,15 @@ async function bootstrap() {
 
   // ── Button wiring ────────────────────────────────────────────────────────
 
-  // ✕ on intro card — close card, stay in 3D explorer mode
-  document.getElementById('close-intro-btn').addEventListener('click', hideIntro);
+  // Enter arrow on intro card — close card, stay in 3D explorer mode
+  enterBtn.addEventListener('click', hideIntro);
 
-  // "Instructions" button in launch bar — reopen the card
-  document.getElementById('instructions-btn').addEventListener('click', showIntro);
+  // "Instructions" button in launch bar — reopen the card (meshes already loaded)
+  document.getElementById('instructions-btn').addEventListener('click', () => {
+    meshLoader.classList.add('hidden');
+    enterBtn.classList.remove('hidden');
+    showIntro();
+  });
 
   // Start evaluation — launch bar only
   document.getElementById('launch-start-btn').addEventListener('click', startCountdown);
