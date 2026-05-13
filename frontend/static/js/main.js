@@ -14,7 +14,7 @@ async function bootstrap() {
   // Shape: { neurons: [{label, bodyId, available}, ...] }
   let neuronManifest = [];
   try {
-    const resp = await fetch('mesh-manifest.json');
+    const resp = await fetch('static/mesh-manifest.json');
     if (resp.ok) {
       const data  = await resp.json();
       neuronManifest = data.neurons ?? [];

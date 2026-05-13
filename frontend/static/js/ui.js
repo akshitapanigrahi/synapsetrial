@@ -47,10 +47,9 @@ export class UI {
 
     const acc = sc + si > 0 ? ((sc / (sc + si)) * 100).toFixed(1) : '—';
     const rows = [
-      ['Sc (correct)',   sc,            'correct'],
-      ['Si (incorrect)', si,            'wrong'],
-      ['Accuracy',       `${acc}%`,     ''],
-      ['Duration',       `${elapsed.toFixed(1)} s`, ''],
+      ['Sc (correct)',   sc,        'correct'],
+      ['Si (incorrect)', si,        'wrong'],
+      ['Accuracy',       `${acc}%`, ''],
     ];
     const grid = document.getElementById('sum-grid');
     grid.innerHTML = rows.map(([label, val, cls]) =>
@@ -135,11 +134,9 @@ export class UI {
   /** Show final results. */
   showResults({ bitRate, sc, si, N, elapsed }) {
     document.getElementById('final-bitrate-display').textContent = `${bitRate.toFixed(2)} bps`;
-    document.getElementById('res-n').textContent      = N;
     document.getElementById('res-sc').textContent     = sc;
     document.getElementById('res-si').textContent     = si;
     document.getElementById('res-trials').textContent = sc + si;
-    document.getElementById('res-time').textContent   = `${elapsed.toFixed(1)} s`;
     const acc = sc + si > 0 ? ((sc / (sc + si)) * 100).toFixed(1) : '—';
     document.getElementById('res-acc').textContent    = `${acc}%`;
 
