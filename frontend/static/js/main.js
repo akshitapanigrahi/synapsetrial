@@ -104,13 +104,22 @@ async function bootstrap() {
 
   // ── Button wiring ────────────────────────────────────────────────────────
 
-  // Enter arrow on intro card — close card, stay in 3D explorer mode
+  const closeIntroBtn = document.getElementById('close-intro-btn');
+
+  // Enter arrow — first-load close
   enterBtn.addEventListener('click', hideIntro);
 
-  // "Instructions" button in launch bar — reopen the card (meshes already loaded)
+  // X button — close when reopened via ?
+  closeIntroBtn.addEventListener('click', () => {
+    closeIntroBtn.classList.add('hidden');
+    hideIntro();
+  });
+
+  // "Instructions" button — reopen with X, no progress bar
   document.getElementById('instructions-btn').addEventListener('click', () => {
     meshLoader.classList.add('hidden');
-    enterBtn.classList.remove('hidden');
+    enterBtn.classList.add('hidden');
+    closeIntroBtn.classList.remove('hidden');
     showIntro();
   });
 
