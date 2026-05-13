@@ -1,0 +1,30 @@
+{
+  "neurons": [
+    { "label": "A", "bodyId": 10860, "available": true },
+    { "label": "B", "bodyId": 12240, "available": true },
+    { "label": "C", "bodyId": 12326, "available": true },
+    { "label": "D", "bodyId": 12681, "available": true },
+    { "label": "E", "bodyId": 13935, "available": true },
+    { "label": "F", "bodyId": 10629, "available": true },
+    { "label": "G", "bodyId": 15890, "available": true },
+    { "label": "H", "bodyId": 16554, "available": true },
+    { "label": "I", "bodyId": 17336, "available": true },
+    { "label": "J", "bodyId": 17459, "available": true },
+    { "label": "K", "bodyId": 17778, "available": true },
+    { "label": "L", "bodyId": 17920, "available": true },
+    { "label": "M", "bodyId": 18168, "available": true },
+    { "label": "N", "bodyId": 10048, "available": true },
+    { "label": "O", "bodyId": 10010, "available": true },
+    { "label": "P", "bodyId": 20020, "available": true },
+    { "label": "Q", "bodyId": 20457, "available": true },
+    { "label": "R", "bodyId": 10001, "available": true },
+    { "label": "S", "bodyId": 10038, "available": true },
+    { "label": "T", "bodyId": 20989, "available": true },
+    { "label": "U", "bodyId": 21176, "available": true },
+    { "label": "V", "bodyId": 10073, "available": true },
+    { "label": "W", "bodyId": 22445, "available": true },
+    { "label": "X", "bodyId": 34869, "available": true },
+    { "label": "Y", "bodyId": 53098, "available": true },
+    { "label": "Z", "bodyId": 514230, "available": true }
+  ]
+}

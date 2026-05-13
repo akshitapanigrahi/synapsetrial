@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYNAPSE</title>
+  <link rel="stylesheet" href="static/css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- Three.js canvas target -->
+<div id="canvas-container"></div>
+
+<!-- ── TOP BAR — always visible ──────────────────────── -->
+<div id="top-bar">
+  <div class="stat-block">
+    <span class="stat-label">TIME</span>
+    <span id="timer" class="stat-value mono idle-dim">—</span>
+  </div>
+  <div id="center-brand">SYNAPSE</div>
+  <div id="top-bar-right">
+    <div class="stat-block right">
+      <span class="stat-label">BIT RATE</span>
+      <span id="bitrate" class="stat-value mono cyan idle-dim">—</span>
+    </div>
+    <div id="launch-bar">
+      <button id="instructions-btn" class="icon-btn" title="Instructions">?</button>
+      <button id="launch-start-btn" class="icon-btn accent" title="Start Evaluation">▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── HUD (game-only panels) ────────────────────────── -->
+<div id="hud" class="hidden">
+
+  <!-- Target display (center-left) -->
+  <div id="target-panel">
+
+    <!-- Shown during gameplay -->
+    <div id="identify-section">
+      <div id="target-type-label">IDENTIFY</div>
+      <div id="input-buffer-row">
+        <span class="input-slot" id="slot-type">_</span>
+        <span class="input-slot" id="slot-letter">_</span>
+      </div>
+      <div id="input-hint">[ E / I ] [ A – O ]</div>
+      <div id="feedback-popup"></div>
+    </div>
+
+    <!-- Shown after game ends, once results modal is closed -->
+    <div id="post-summary" class="hidden">
+      <div class="post-summary-header">SESSION COMPLETE</div>
+      <div id="sum-bitrate"></div>
+      <div id="sum-grid"></div>
+      <div class="post-summary-hint">Press ▶ to play again</div>
+    </div>
+
+  </div>
+
+  <!-- Right stats panel -->
+  <div id="stats-panel">
+    <div class="stat-row">
+      <span class="stat-label">N</span>
+      <span class="stat-value mono" id="stat-n">30</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Sc</span>
+      <span class="stat-value mono correct" id="stat-sc">0</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Si</span>
+      <span class="stat-value mono wrong" id="stat-si">0</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">TRIALS</span>
+      <span class="stat-value mono" id="stat-trials">0</span>
+    </div>
+    <div id="network-canvas-wrap">
+      <div id="connectome-header">
+        <span class="stat-label">CONNECTOME</span>
+        <button id="expand-connectome-btn" title="Expand">⤢</button>
+      </div>
+      <canvas id="network-canvas" width="200" height="200"></canvas>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- ── CONNECTOME EXPANDED MODAL ─────────────────────── -->
+<div id="connectome-modal" class="hidden">
+  <div id="connectome-modal-card">
+    <div id="connectome-modal-header">
+      <span class="stat-label" style="letter-spacing:0.2em">CONNECTOME</span>
+      <button id="close-connectome-btn" title="Close">✕</button>
+    </div>
+    <canvas id="network-canvas-large" width="520" height="520"></canvas>
+  </div>
+</div>
+
+<!-- ── INTRO SCREEN ──────────────────────────────────── -->
+<div id="intro-screen">
+  <div id="intro-card">
+    <button id="close-intro-btn" title="Close">✕</button>
+    <h1 class="brand">SYNAPSE</h1>
+    <p class="subtitle">Neural Connectome Bit Rate Game</p>
+
+    <div id="intro-rules">
+      <p class="rule-def">
+        A <strong>connectome</strong> is a complete wiring diagram of the brain,
+        mapping every neuron and every synaptic connection between them.
+      </p>
+
+      <p class="rule-objective">
+        Your objective is to <strong>reconstruct as much of the connectome as possible in 60 seconds</strong>.
+        Each round, a neuron fires and propagates a signal to the next.
+        Identify which neuron fired and classify the <strong>type of synapse</strong> it projects.
+      </p>
+
+      <div class="rule-types">
+        <div class="rule-type-row">
+          <span class="dot exc"></span>
+          <span><strong>Excitatory (E)</strong> — a bright green synapse activates its target.</span>
+        </div>
+        <div class="rule-type-row">
+          <span class="dot inh"></span>
+          <span><strong>Inhibitory (I)</strong> — a bright red synapse suppresses its target.</span>
+        </div>
+      </div>
+
+      <div class="rule-input">
+        <p>Press <kbd>E</kbd> or <kbd>I</kbd> (synapse type), then the <kbd>letter</kbd> of the firing neuron (A – Z).</p>
+        <p class="rule-example">Example: neuron <strong>G</strong> pulses green → type <kbd>E</kbd> <kbd>G</kbd></p>
+      </div>
+    </div>
+
+    <p class="duration-note">Press ▶ to start · Drag to orbit · Scroll to zoom</p>
+  </div>
+</div>
+
+<!-- ── COUNTDOWN ─────────────────────────────────────── -->
+<div id="countdown-screen" class="hidden">
+  <div id="countdown-number">3</div>
+</div>
+
+<!-- ── RESULTS SCREEN ────────────────────────────────── -->
+<div id="results-screen" class="hidden">
+  <div id="results-card">
+    <button id="close-results-btn" title="Close">✕</button>
+    <h2>SESSION COMPLETE</h2>
+    <div id="final-bitrate-display"></div>
+    <div id="results-grid">
+      <div class="res-cell"><span class="res-label">N</span><span class="res-val" id="res-n">—</span></div>
+      <div class="res-cell"><span class="res-label">Sc (correct)</span><span class="res-val correct" id="res-sc">—</span></div>
+      <div class="res-cell"><span class="res-label">Si (incorrect)</span><span class="res-val wrong" id="res-si">—</span></div>
+      <div class="res-cell"><span class="res-label">Trials</span><span class="res-val" id="res-trials">—</span></div>
+      <div class="res-cell"><span class="res-label">Accuracy</span><span class="res-val" id="res-acc">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Neuron label overlays (injected by JS) ───────── -->
+<div id="labels-container"></div>
+
+<script type="module" src="static/js/main.js"></script>
+</body>
+</html>
