@@ -62,7 +62,7 @@ export class NeuronScene {
     this._scene.fog        = new THREE.FogExp2(0x020408, 0.00012);
 
     this._camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 8000);
-    this._camera.position.set(0, 40, 620);
+    this._camera.position.set(0, 40, 725);
   }
 
   _initLights() {
@@ -342,7 +342,7 @@ export class NeuronScene {
       const pos = this._neuronPositions.get(this._currentFiringLabel);
       if (pos) {
         const p = project(pos);
-        if (p && Math.hypot(clickX - p.sx, clickY - p.sy) < 260) {
+        if (p && Math.hypot(clickX - p.sx, clickY - p.sy) < 120) {
           return this._currentFiringLabel;
         }
       }
